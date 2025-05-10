@@ -1,0 +1,20 @@
+<div
+  class="block block_{{ orientation() }}"
+  [ngClass]="{
+    block_isFruit: block().isFruit,
+    block_head: block().head,
+  }"
+>
+  @if (block().isFruit) {
+    <img class="block__img block__img_snake" [src]="fruitImage()" />
+  }
+
+  @if (block().head) {
+    <img class="block__img block__img_snake" src="assets/snake-head.svg" />
+  } @else if (block().isActive) {
+    <img
+      class="block__img block__img_snake block__img_snake-body"
+      src="assets/snake-body.svg"
+    />
+  }
+</div>

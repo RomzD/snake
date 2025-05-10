@@ -1,0 +1,17 @@
+:host {
+  $dimension: 512px;
+
+  .field {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    border: 1px solid black;
+
+    &_collided {
+      border-right: 10px solid red;
+    }
+
+    app-block {
+      flex: 1;
+    }
+  }
+}

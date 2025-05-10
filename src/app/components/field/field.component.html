@@ -1,0 +1,17 @@
+<div
+  class="field"
+  [ngClass]="{ field_collided: isCollided }"
+  [style]="{
+    width: dimension * dimension * 2 + 'px',
+    height: dimension * dimension * 2 + 'px',
+    'grid-template-columns': 'repeat(' + dimension + ', 1fr)',
+  }"
+>
+  @for (block of fields; track block.id) {
+    <app-block
+      [block]="block"
+      [orientation]="keydownService.orientation"
+      [fruitImage]="fruitService.fruitImage"
+    ></app-block>
+  }
+</div>

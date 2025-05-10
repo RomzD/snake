@@ -1,0 +1,8 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Правильный равносторонний восьмиугольник -->
+  <polygon points="10,4  22,4  
+                  28,10  28,22  
+                  22,28  10,28  
+                  4,22  4,10" 
+           fill="green" stroke="#1a5e1a" stroke-width="1"/>
+</svg>
