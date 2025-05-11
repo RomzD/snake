@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { FieldComponent } from './components/field/field.component';
-import { StatsComponent } from './components/stats/stats.component';
+import { TickService } from './services';
+import { FieldComponent, MenuComponent, StatsComponent } from './components';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FieldComponent, StatsComponent],
+  imports: [RouterOutlet, FieldComponent, MenuComponent, StatsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  protected readonly tickService = inject(TickService);
+
   title = 'snake';
 }

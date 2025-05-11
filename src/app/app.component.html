@@ -1,2 +1,6 @@
-<app-stats></app-stats>
-<app-field></app-field>
+@if (tickService.isStarted()) {
+  <app-stats></app-stats>
+  <app-field></app-field>
+} @else {
+  <app-menu></app-menu>
+}

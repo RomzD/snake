@@ -1,0 +1,16 @@
+<section class="menu">
+  @for (setting of settings; track setting.value()) {
+    <div class="menu__setting">
+      <h3>{{ setting.title }}</h3>
+      <input
+        min="1"
+        max="200"
+        type="number"
+        [(ngModel)]="setting.value"
+        (input)="setConfig(setting.key, setting.value())"
+      />
+    </div>
+  }
+
+  <button class="menu__start" (click)="startGame()">Начать игру</button>
+</section>

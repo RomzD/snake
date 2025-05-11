@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { ConfigService } from './config.service';
 import { FieldBlock } from '../interfaces';
-import { environment } from '../environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FruitService {
+  private readonly configService = inject(ConfigService);
+
   private fruitIndex = -1;
 
   private applesCollected = -1;
@@ -13,7 +15,11 @@ export class FruitService {
   private fruitImageNumber = 1;
 
   get fruitImage(): string {
-    return environment.imageFruitBase + this.fruitImageNumber + '.svg';
+    return (
+      this.configService.config().imageFruitBase +
+      this.fruitImageNumber +
+      '.svg'
+    );
   }
 
   get applesAmount(): number {
@@ -64,7 +70,8 @@ export class FruitService {
   private randomizeFruit(): void {
     const fruitImageNumber = Math.round(Math.random() * 10);
     this.fruitImageNumber =
-      fruitImageNumber < 1 || fruitImageNumber > environment.fruitAmount
+      fruitImageNumber < 1 ||
+      fruitImageNumber > this.configService.config().fruitAmount
         ? 1
         : fruitImageNumber;
   }

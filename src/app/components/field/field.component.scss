@@ -2,12 +2,27 @@
   $dimension: 512px;
 
   .field {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(16, 1fr);
     border: 1px solid black;
 
     &_collided {
       border-right: 10px solid red;
+    }
+
+    &__countdown {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+
+      color: blue;
+      font-size: 96px;
     }
 
     app-block {

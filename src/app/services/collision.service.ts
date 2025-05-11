@@ -1,21 +1,23 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../environments';
 import { Keys } from '../constants';
 import { Subject } from 'rxjs';
 import { SnakeMoveService } from './snake-move.service';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CollisionService {
+  private readonly configService = inject(ConfigService);
+
   private readonly snakeMoveService = inject(SnakeMoveService);
 
   private readonly subject = new Subject<void>();
 
-  private readonly cellSideCount = Math.sqrt(environment.cells);
+  private readonly cellSideCount = Math.sqrt(this.configService.config().cells);
 
   private sides = {
-    left: Math.sqrt(environment.cells),
+    left: Math.sqrt(this.configService.config().cells),
     right: new Array(this.cellSideCount)
       .fill(null)
       .map((cell, i) => i * this.cellSideCount - 1),
@@ -29,7 +31,7 @@ export class CollisionService {
     const nextCell = activeIndex + nextMove;
     switch (nextMove) {
       case Keys.ArrowDown.value:
-        return nextCell > environment.cells - 1;
+        return nextCell > this.configService.config().cells - 1;
       case Keys.ArrowUp.value:
         return nextCell < 0;
       case Keys.ArrowRight.value:

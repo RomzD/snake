@@ -14,4 +14,8 @@
       [fruitImage]="fruitService.fruitImage"
     ></app-block>
   }
+
+  @if (countDown()) {
+    <div class="field__countdown">{{ countDown() }}</div>
+  }
 </div>

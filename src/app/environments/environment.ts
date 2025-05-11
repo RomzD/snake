@@ -4,4 +4,5 @@ export const environment = {
   tick: 100,
   imageFruitBase: 'assets/fruits/',
   fruitAmount: 10,
+  increaseSpeedRate: 0,
 };

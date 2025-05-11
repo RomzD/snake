@@ -3,18 +3,19 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
+  signal,
 } from '@angular/core';
 import { BlockComponent } from '../block';
 import {
   CollisionService,
+  ConfigService,
   FruitService,
   SnakeMoveService,
   TickService,
 } from '../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, take, takeUntil, tap } from 'rxjs';
+import { filter, interval, take, takeUntil, tap, timer } from 'rxjs';
 import { KeydownService } from '../../services/keydown.service';
-import { environment } from '../../environments';
 import { NgClass } from '@angular/common';
 import { FieldBlock } from '../../interfaces';
 
@@ -27,6 +28,8 @@ import { FieldBlock } from '../../interfaces';
 export class FieldComponent {
   private readonly cdr = inject(ChangeDetectorRef);
 
+  private readonly configService = inject(ConfigService);
+
   private readonly tickService = inject(TickService);
 
   protected readonly keydownService = inject(KeydownService);
@@ -37,13 +40,15 @@ export class FieldComponent {
 
   private readonly snakeMoveService = inject(SnakeMoveService);
 
-  private readonly initHeadPos = environment.startCell;
+  private readonly initHeadPos = this.configService.config().startCell;
 
-  private readonly arrayCount = environment.cells;
+  private readonly arrayCount = this.configService.config().cells;
 
   private nextMove = 1;
 
-  readonly dimension = Math.sqrt(environment.cells);
+  readonly dimension = Math.sqrt(this.configService.config().cells);
+
+  readonly countDown = signal(3);
 
   isCollided = false;
 
@@ -61,7 +66,18 @@ export class FieldComponent {
 
   constructor() {
     afterNextRender(() => {
-      this.tickService.runTicks();
+      interval(1000)
+        .pipe(
+          take(this.countDown()),
+          tap(() => {
+            this.countDown.set(this.countDown() - 1);
+            if (this.countDown()) {
+              return;
+            }
+            this.tickService.runTicks();
+          }),
+        )
+        .subscribe();
     });
 
     this.keydownService.listener.pipe(takeUntilDestroyed()).subscribe();
