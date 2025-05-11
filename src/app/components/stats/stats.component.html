@@ -1,4 +1,19 @@
 <section class="stats">
-  <h2>Яблок собрано: {{ fruitService.applesAmount }}</h2>
-  <h2>Скорость: {{ tickService.speed }}</h2>
+  <div class="stats__field-container">
+    <h2 class="stats__field">Фруктов собрано: {{ fruitsTotal() }}</h2>
+    <div class="stats__fruits">
+      @for (fruit of fruitsByType(); track fruit.image) {
+        <img class="block__img block__img_snake" [src]="fruit.image" />:
+        {{ fruit.value }}
+      }
+    </div>
+  </div>
+  <h2 class="stats__field">
+    Скорость: <span class="stats__stat-value">{{ tickService.speed }}</span>
+  </h2>
+
+  @if (isCollided()) {
+    <app-button (onButtonClick)="startAgain()" text="Начать заново">
+    </app-button>
+  }
 </section>

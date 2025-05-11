@@ -1,8 +1,9 @@
 <section class="menu">
   @for (setting of settings; track setting.value()) {
     <div class="menu__setting">
-      <h3>{{ setting.title }}</h3>
+      <h3 class="menu__setting-title">{{ setting.title }}</h3>
       <input
+        class="menu__setting-input"
         min="1"
         max="200"
         type="number"
@@ -12,5 +13,5 @@
     </div>
   }
 
-  <button class="menu__start" (click)="startGame()">Начать игру</button>
+  <app-button (onButtonClick)="startGame()" text="Начать игру"></app-button>
 </section>

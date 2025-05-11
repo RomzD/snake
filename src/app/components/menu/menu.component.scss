@@ -1,0 +1,30 @@
+:host {
+  .menu {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 24px 0;
+    gap: 8px;
+
+    &__setting {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+    }
+
+    &__setting-input {
+      font-size: 20px;
+      line-height: 24px;
+      border: 1px solid gray;
+      border-radius: 12px;
+      padding: 0 10px;
+    }
+
+    &__setting-title {
+      font-size: 18px;
+      line-height: 24px;
+      margin: 0;
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 import { FieldBlock } from '../interfaces';
+import { getFruitImageUrl } from '../utils';
+import { StatisticsService } from './statistics.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,22 +10,14 @@ import { FieldBlock } from '../interfaces';
 export class FruitService {
   private readonly configService = inject(ConfigService);
 
-  private fruitIndex = -1;
+  private readonly statisticsService = inject(StatisticsService);
 
-  private applesCollected = -1;
+  private fruitIndex = -1;
 
   private fruitImageNumber = 1;
 
   get fruitImage(): string {
-    return (
-      this.configService.config().imageFruitBase +
-      this.fruitImageNumber +
-      '.svg'
-    );
-  }
-
-  get applesAmount(): number {
-    return this.applesCollected;
+    return getFruitImageUrl(this.fruitImageNumber);
   }
 
   constructor() {}
@@ -50,9 +44,8 @@ export class FruitService {
   placeFruit(fields: FieldBlock[], isPlaceFruite = false): boolean {
     const fruitIndex = this.checkFruitIndex(fields, isPlaceFruite);
     if (fruitIndex) {
-      this.fruitIndex = fruitIndex;
-      this.applesCollected++;
       this.randomizeFruit();
+      this.fruitIndex = fruitIndex;
 
       if (fields[fruitIndex].isActive) {
         const newFruitIndex = fields.find((cell) => !cell.isActive)!.id;
@@ -68,11 +61,16 @@ export class FruitService {
   }
 
   private randomizeFruit(): void {
+    if (this.fruitIndex !== -1) {
+      this.statisticsService.plusFruitByType(this.fruitImageNumber);
+    }
+
     const fruitImageNumber = Math.round(Math.random() * 10);
     this.fruitImageNumber =
-      fruitImageNumber < 1 ||
-      fruitImageNumber > this.configService.config().fruitAmount
-        ? 1
-        : fruitImageNumber;
+      fruitImageNumber < 0
+        ? 0
+        : fruitImageNumber >= this.configService.config().fruitAmount
+          ? this.configService.config().fruitAmount - 1
+          : fruitImageNumber;
   }
 }

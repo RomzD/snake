@@ -3,10 +3,11 @@ import { environment } from '../../environments';
 import { ConfigService, TickService } from '../../services';
 import { EnvironmentKeys } from '../../constants';
 import { FormsModule } from '@angular/forms';
+import { ButtonComponent } from '../button';
 
 @Component({
   selector: 'app-menu',
-  imports: [FormsModule],
+  imports: [ButtonComponent, FormsModule],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
 })
