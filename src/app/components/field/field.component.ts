@@ -117,6 +117,7 @@ export class FieldComponent {
             isPlaceFruite: isPlaceFruit,
             nextCell: head + this.nextMove,
           });
+
           this.isCollidedSync = this.collisionService.isCollidedSelf(nextCell);
           if (this.isCollidedSync) {
             const tail = this.fields[collisionTranil!.id];
@@ -128,7 +129,6 @@ export class FieldComponent {
           if (this.fruitService.placeFruit(this.fields, isPlaceFruit)) {
             this.tickService.increaseSpeed();
           }
-          console.log('detect');
           this.cdr.detectChanges();
         }),
       )

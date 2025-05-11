@@ -55,7 +55,6 @@ export class SnakeMoveService {
   }
 
   syncSnakeAndField(fields: FieldBlock[]): void {
-    console.log('sync');
     this.snake.forEach((segment) => {
       fields[segment.id] = { ...segment };
     });
