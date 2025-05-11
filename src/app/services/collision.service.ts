@@ -42,8 +42,12 @@ export class CollisionService {
     return false;
   }
 
-  isColidedSelf(newIndex: number): boolean {
-    return this.snakeMoveService.isIntersectingWithSnake(newIndex);
+  isCollidedSelf(newIndex: number): boolean {
+    const isCollided = this.snakeMoveService.isIntersectingWithSnake(newIndex);
+    if (isCollided) {
+      this.subject.next();
+    }
+    return isCollided;
   }
 
   isCollided(activeIndex: number, nextMove: number): boolean {

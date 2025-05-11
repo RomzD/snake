@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { FieldBlock, MoveParams } from '../interfaces';
 import { environment } from '../environments';
 
+const EMPTY_FIELD_STATe = {
+  isActive: false,
+  head: false,
+  isFruit: false,
+  prev: -1,
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -22,7 +29,7 @@ export class SnakeMoveService {
 
   constructor() {}
 
-  onMove(params: MoveParams): void {
+  onMove(params: MoveParams): FieldBlock | null {
     const head = this.snake[this.snake.length - 1];
     const { fields, isPlaceFruite } = params;
     this.snake.push({
@@ -37,12 +44,18 @@ export class SnakeMoveService {
     if (!isPlaceFruite) {
       const snakeTail = this.snake.shift()!;
       const fieldRemoved = fields[snakeTail.id];
+      const onCollitionTail = { ...fieldRemoved };
       fieldRemoved.isActive = false;
       fieldRemoved.head = false;
       fieldRemoved.isFruit = false;
       fieldRemoved.prev = -1;
+      return onCollitionTail;
     }
+    return null;
+  }
 
+  syncSnakeAndField(fields: FieldBlock[]): void {
+    console.log('sync');
     this.snake.forEach((segment) => {
       fields[segment.id] = { ...segment };
     });

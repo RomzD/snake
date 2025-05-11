@@ -1,6 +1,6 @@
 <section class="stats">
   <div class="stats__field-container">
-    <h2 class="stats__field">Фруктов собрано: {{ fruitsTotal() }}</h2>
+    <h2 class="stats__field">Всего фруктов: {{ fruitsTotal() }}</h2>
     <div class="stats__fruits">
       @for (fruit of fruitsByType(); track fruit.image) {
         <img class="block__img block__img_snake" [src]="fruit.image" />:

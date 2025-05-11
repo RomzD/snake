@@ -13,8 +13,8 @@ import {
   SnakeMoveService,
   TickService,
 } from '../../services';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, interval, take, takeUntil, tap, timer } from 'rxjs';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { filter, interval, map, take, takeUntil, tap, timer } from 'rxjs';
 import { KeydownService } from '../../services/keydown.service';
 import { NgClass } from '@angular/common';
 import { FieldBlock } from '../../interfaces';
@@ -50,7 +50,11 @@ export class FieldComponent {
 
   readonly countDown = signal(3);
 
-  isCollided = false;
+  readonly isCollidedTemplate = toSignal(
+    this.collisionService.isColided$.pipe(map(() => true)),
+  );
+
+  isCollidedSync = false;
 
   readonly fields: FieldBlock[] = new Array(this.arrayCount)
     .fill(null)
@@ -94,36 +98,37 @@ export class FieldComponent {
       .pipe(
         takeUntilDestroyed(),
         takeUntil(this.collisionService.isColided$),
-        filter(() => !this.isCollided),
+        filter(() => !this.isCollidedSync),
         tap(() => {
           this.keydownService.setDirection(this.nextMove);
           const head = this.fields.findIndex((i) => i.head);
           const nextCell = head + this.nextMove;
-          this.isCollided = this.collisionService.isCollided(
+          this.isCollidedSync = this.collisionService.isCollided(
             head,
             this.nextMove,
           );
-          if (this.isCollided) {
-            this.cdr.detectChanges();
-            this.cdr.detach();
+          if (this.isCollidedSync) {
             return;
           }
 
           const isPlaceFruit = this.fields[head + this.nextMove].isFruit;
-          this.snakeMoveService.onMove({
+          const collisionTranil = this.snakeMoveService.onMove({
             fields: this.fields,
             isPlaceFruite: isPlaceFruit,
             nextCell: head + this.nextMove,
           });
-
-          this.isCollided = this.collisionService.isColidedSelf(nextCell);
-          if (this.isCollided) {
+          this.isCollidedSync = this.collisionService.isCollidedSelf(nextCell);
+          if (this.isCollidedSync) {
+            const tail = this.fields[collisionTranil!.id];
+            this.fields[collisionTranil!.id] = { ...tail, ...collisionTranil };
             return;
           }
+          this.snakeMoveService.syncSnakeAndField(this.fields);
 
           if (this.fruitService.placeFruit(this.fields, isPlaceFruit)) {
             this.tickService.increaseSpeed();
           }
+          console.log('detect');
           this.cdr.detectChanges();
         }),
       )
